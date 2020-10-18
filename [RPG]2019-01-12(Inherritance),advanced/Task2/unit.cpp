@@ -31,6 +31,10 @@ void Unit::SetEvasion(int evasionChance)
 {
 	this->evasionChance = evasionChance;
 }
+void Unit::SetName(string name)
+{
+	this->unitName = name;
+}
 int Unit::GetHP()
 {
 	return HP;
@@ -44,20 +48,27 @@ int Unit::GetEvasion()
 	return evasionChance;
 }
 
-void Unit::Attack(Unit *obj)
+std::string Unit::GetName()
+{
+	return unitName;
+}
+
+void Unit::Attack(Unit* obj)
 {
 	if (obj->Evade() == false)
 	{
-		obj->HP = obj->HP - damage;
-		if (obj->HP < 0)
+		obj->SetHP(obj->GetHP() - GetDamage());
+		if (obj->GetHP() <= 0)
 		{
 			obj->HP = 0;
-			cout << "Foe died.\n";
+			cout << "Foe " << obj->GetName() << " died.\n";
 		}
+		else
+			cout << "Foe " << obj->GetName() << " taken " << GetDamage() << " damage.\n";
 	}
 	else
 	{
-		cout << "/-/-/-EVADE-/-/-/\n";
+		cout << obj->unitName << " ~EVADED~ " << unitName << "'s attack.\n";
 	}
 }
 void Unit::Show()

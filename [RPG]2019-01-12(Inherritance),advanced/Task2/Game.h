@@ -22,15 +22,14 @@ public:
 	bool Continue()
 	{
 
-		if (GetBlueTeam().GetUnit(0)->GetHP() <= 0 & GetBlueTeam().GetUnit(1)->GetHP() <= 0 && GetBlueTeam().GetUnit(2)->GetHP() <= 0)
+		if (GetBlueTeam().GetUnit(0)->GetHP() <= 0 && GetBlueTeam().GetUnit(1)->GetHP() <= 0 && GetBlueTeam().GetUnit(2)->GetHP() <= 0)
 		{
-			cout << "\n\n------STOP------\n\n";
+			cout << "\n\n------RED WON------\n\n";
 			return false;
 		}
 		else if (GetRedTeam().GetUnit(0)->GetHP() <= 0 && GetRedTeam().GetUnit(1)->GetHP() <= 0 && GetRedTeam().GetUnit(2)->GetHP() <= 0)
 		{
-			cout << "\n\n------STOP------\n\n";
-
+			cout << "\n\n-----BLUE WON------\n\n";
 			return false;
 		}
 		else
@@ -51,16 +50,18 @@ public:
 	}
 	void ShowAllLog()const
 	{
-		cout << "\n\n\nAll battle changes : \n";
-		for (auto l : logs)
+		cout << "\n\n\nAll battle changes.\n";
+		int i = 1;
+		for (const auto& l : logs)
 		{
-			cout << "1-st Blue " << l.firstBlue << " HP" << endl;
-			cout << "2-nd Blue " << l.secondBlue << " HP" << endl;
-			cout << "3-nd Blue " << l.thirdBlue << " HP" << endl;
-			cout << "1-st Red " << l.firstRed << " HP" << endl;
-			cout << "2-nd Red " << l.secondRed << " HP" << endl;
-			cout << "3-nd Red " << l.thirdRed << " HP" << endl;
-			cout << "***NEXT ROUND***\n----------------------------\n\n";
+			cout << "\n***#" << i << " ROUND***\n----------------------------\n\n";
+			cout << "#1 Blue " << l.firstBlue << " HP" << endl;
+			cout << "#2 Blue " << l.secondBlue << " HP" << endl;
+			cout << "#3 Blue " << l.thirdBlue << " HP" << endl;
+			cout << "#1 Red " << l.firstRed << " HP" << endl;
+			cout << "#2 Red " << l.secondRed << " HP" << endl;
+			cout << "#3 Red " << l.thirdRed << " HP" << endl;
+			i++;
 		}
 	}
 
@@ -85,28 +86,19 @@ public:
 	bool TurnBlue()
 	{
 		system("color 1A");
+		cout << "\n---Your team---\n";
+		for (int i = 0; i < 3; i++)
+		{
+			cout << "#" << i + 1 << " mate : " << typeid(*Blue.GetUnit(i)).name() + 5;
+			if (Blue.GetUnit(i)->GetHP() <= 0) { cout << ": Dead\n"; }
+			else  cout << " [HP:" << Blue.GetUnit(i)->GetHP() << " ATK:" << Blue.GetUnit(i)->GetDamage() << " EVASION:" << Blue.GetUnit(i)->GetEvasion() << "]\n";
+		}
 		cout << "\n----Red team----\n";
 		for (int i = 0; i < 3; i++)
 		{
-			cout << i + 1 << "-st" << typeid(*Red.GetUnit(i)).name() + 5 << " foe : ";
-			if (Red.GetUnit(i)->GetHP() == 0)
-			{
-
-				cout << "Dead";
-			}
-			else
-			{
-				cout << Red.GetUnit(i)->GetHP();
-			}
-			cout << endl;
-		}
-		cout << "---Your team---\n";
-		for (int i = 0; i < 3; i++)
-		{
-
-			cout << i + 1 << "-st mate : ";
-			if (Blue.GetUnit(i)->GetHP() > 0) { cout << typeid(*Blue.GetUnit(i)).name() + 5 << endl; }
-			else { cout << "Dead\n"; }
+			cout << "#" << i + 1 << " enemy : " << typeid(*Red.GetUnit(i)).name() + 5;
+			if (Red.GetUnit(i)->GetHP() <= 0)cout << ": Dead\n";
+			else cout << " [HP:" << Red.GetUnit(i)->GetHP() << " ATK:" << Red.GetUnit(i)->GetDamage() << " EVASION:" << Red.GetUnit(i)->GetEvasion() << "]\n";
 		}
 		for (int i = 0; i < 3; i++)
 		{
@@ -114,10 +106,9 @@ public:
 				continue;
 			else
 			{
-				cout << "\nChoose foe for" << typeid(*Blue.GetUnit(i)).name() + 5 << " (1-3): ";
 				int foe;
+				cout << "\nChoose foe for" << typeid(*Blue.GetUnit(i)).name() + 5 << " (1-3): ";
 				cin >> foe;
-				foe--;
 				if (foe < 0 || foe > 2)
 				{
 					do
@@ -127,27 +118,26 @@ public:
 						cin >> foe;
 					} while (foe < 0 || foe > 2);
 				}
-				else if (Red.GetUnit(foe)->GetHP() == 0)
+				if(Red.GetUnit(foe)->GetHP() <= 0)
+				do
 				{
 					cout << "\nYou shouldn't kill dead foes\n";
-					do
-					{
-						cout << "Choose foe for" << typeid(*Blue.GetUnit(i)).name() + 5 << " (1-3): ";
-						cin >> foe;
-					} while (foe < 1 || foe>3);
-				}
+					cout << "Choose foe for" << typeid(*Blue.GetUnit(i)).name() + 5 << " (1-3): ";
+					cin >> foe;
+				} while (Red.GetUnit(foe)->GetHP() <= 0);
 
+				foe--;
 				if (Blue.GetUnit(i)->GetHP() != 0)
 				{
-
-					cout << "\nBlue " << typeid(*Blue.GetUnit(i)).name() + 6 << " attacked Red " << typeid(*Red.GetUnit(foe)).name() + 6 << ".\n";
+					cout << "\n#" << i + 1 << " Blue " << typeid(*Blue.GetUnit(i)).name() + 6 << " attacked #" << foe + 1 << " Red " << typeid(*Red.GetUnit(foe)).name() + 6 << ".\n";
+					int lasthp = Red.GetUnit(foe)->GetHP();
 					Blue.GetUnit(i)->Attack(Red.GetUnit(foe));
-					cout << "Currently, " << foe + 1 << "-st blue has : " << GetRedTeam().GetUnit(foe)->GetHP() << " HP left.\n";
+					cout << "#" << foe + 1 << " Red " << GetRedTeam().GetUnit(foe)->GetName() << "'s hp has dropped from " << lasthp << " to " << GetRedTeam().GetUnit(foe)->GetHP() << endl;
 					if (Continue() == false)
 					{
-						cout << "1-st red : " << GetRedTeam().GetUnit(0)->GetHP() << endl;
-						cout << "2-st red : " << GetRedTeam().GetUnit(1)->GetHP() << endl;
-						cout << "3-st red : " << GetRedTeam().GetUnit(2)->GetHP() << endl;
+						cout << "#1 red : " << GetRedTeam().GetUnit(0)->GetHP() << endl;
+						cout << "#2 red : " << GetRedTeam().GetUnit(1)->GetHP() << endl;
+						cout << "#3 red : " << GetRedTeam().GetUnit(2)->GetHP() << endl;
 						return false;
 					}
 					else
@@ -168,15 +158,20 @@ public:
 		system("color 4A");
 		for (int i = 0; i < 3; i++)
 		{
-			cout << i + 1 << "-st blue : ";
+			cout << "#" << i + 1 << " mate : ";
 			if (Blue.GetUnit(i)->GetHP() == 0)
-			{
 				cout << "Dead";
-			}
 			else
-			{
-				cout << Blue.GetUnit(i)->GetHP();
-			}
+				cout << Blue.GetUnit(i)->GetHP() << " HP";
+			cout << endl;
+		}
+		for (int i = 0; i < 3; i++)
+		{
+			cout << "#" << i + 1 << " enemy : ";
+			if (Red.GetUnit(i)->GetHP() == 0)
+				cout << "Dead";
+			else
+				cout << Red.GetUnit(i)->GetHP() << " HP";
 			cout << endl;
 		}
 		cout << "--------------\n";
@@ -187,14 +182,15 @@ public:
 			if (Red.GetUnit(i)->GetHP() != 0)
 			{
 
-				cout << "Red " << typeid(*Red.GetUnit(i)).name() + 6 << " attacked Blue " << typeid(*Blue.GetUnit(foe)).name() + 6 << ".\n";
+				cout << "\n#" << i + 1 << " Red " << typeid(*Red.GetUnit(i)).name() + 6 << " attacked #" << foe + 1 << " blue " << typeid(*Red.GetUnit(foe)).name() + 6 << ".\n";
+				int lasthp = Red.GetUnit(foe)->GetHP();
 				Red.GetUnit(i)->Attack(Blue.GetUnit(foe));
-				cout << "Currently, " << foe + 1 << "-st red has : " << GetBlueTeam().GetUnit(foe)->GetHP() << " HP left.\n";
+				cout << "#" << foe + 1 << " Blue " << GetBlueTeam().GetUnit(foe)->GetName() << "'s hp has dropped from " << lasthp << " to " << GetBlueTeam().GetUnit(foe)->GetHP() << endl;
 				if (Continue() == false)
 				{
-					cout << "\n1-st blue : " << GetBlueTeam().GetUnit(0)->GetHP() << endl;
-					cout << "2-st blue : " << GetBlueTeam().GetUnit(1)->GetHP() << endl;
-					cout << "3-st blue : " << GetBlueTeam().GetUnit(2)->GetHP() << endl;
+					cout << "#1 blue : " << GetBlueTeam().GetUnit(0)->GetHP() << endl;
+					cout << "#2 blue : " << GetBlueTeam().GetUnit(1)->GetHP() << endl;
+					cout << "#3 blue : " << GetBlueTeam().GetUnit(2)->GetHP() << endl;
 					return false;
 
 				}
@@ -216,14 +212,14 @@ public:
 		cout << "---Red team---\n";
 		for (int i = 0; i < 3; i++)
 		{
-			cout << i + 1 << "-st : ";
+			cout << "#" << i + 1 << " : ";
 			Red.GetUnit(i)->Show();
 			cout << endl;
 		}
 		cout << "---Blue team---\n";
 		for (int i = 0; i < 3; i++)
 		{
-			cout << i + 1 << "-st : ";
+			cout << "#" << i + 1 << " : ";
 			Blue.GetUnit(i)->Show();
 			cout << endl;
 		}

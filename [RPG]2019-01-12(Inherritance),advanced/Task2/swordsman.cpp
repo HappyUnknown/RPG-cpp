@@ -7,6 +7,7 @@ Swordsman::Swordsman()
 	Unit::SetHP(15);
 	Unit::SetDamage(5);
 	Unit::SetEvasion(60);
+	Unit::SetName("Swordsman");
 }
 Swordsman::Swordsman(int HP, int damage, int evasionChance)
 {

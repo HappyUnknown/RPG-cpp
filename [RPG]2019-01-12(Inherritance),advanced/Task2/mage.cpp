@@ -6,6 +6,7 @@ Mage::Mage()
 	Unit::SetHP(8);
 	Unit::SetDamage(10);
 	Unit::SetEvasion(30);
+	Unit::SetName("Mage");
 }
 Mage::Mage(int maxHP, int damage, int evasionChance)
 {

@@ -7,6 +7,7 @@ Archer::Archer()
 	Unit::SetHP(12);
 	Unit::SetDamage(4);
 	Unit::SetEvasion(40);
+	Unit::SetName("Archer");
 }
 Archer::Archer(int maxHP, int damage, int evasionChance)
 {
@@ -25,17 +26,17 @@ bool Archer::TrueArrow()
 		return false;
 	}
 }
-void Archer::Attack(Unit *obj)
+void Archer::Attack(Unit* obj)
 {
 	if (TrueArrow() == true)
 	{
-		cout << "TRUE ARROW - Miss chance = 0%\n";
-		cout << "Before combat : " << obj->GetHP() << endl;
+		//cout << "Before combat : " << obj->GetHP() << endl;
 		obj->SetHP(obj->GetHP() - GetDamage());
+		cout << "Foe " << obj->GetName() << " taken " << GetDamage() << " damage. TRUE ARROW - Miss chance = 0%.\n";
 		if (obj->GetHP() < 0)
 		{
 			obj->SetHP(0);
-			cout << "Unit died.\n";
+			cout << "Foe " << obj->GetName() << " died.\n";
 		}
 
 	}
@@ -47,12 +48,14 @@ void Archer::Attack(Unit *obj)
 			if (obj->GetHP() < 0)
 			{
 				obj->SetHP(0);
-				cout << "Unit died.\n";
+				cout << "Foe " << obj->GetName() << " died.\n";
 			}
+			else
+				cout << "Foe " << obj->GetName() << " taken " << GetDamage() << " damage.\n";
 		}
 	}
 }
-void Archer::OldAttack(Unit *obj)
+void Archer::OldAttack(Unit* obj)
 {
 
 	if (obj->Evade() == false)
@@ -61,7 +64,7 @@ void Archer::OldAttack(Unit *obj)
 		if (obj->GetHP() < 0)
 		{
 			obj->SetHP(0);
-			cout << "Unit died.\n";
+			cout << "Foe " << obj->GetName() << " died.\n";
 		}
 	}
 }

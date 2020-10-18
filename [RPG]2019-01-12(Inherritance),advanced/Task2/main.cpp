@@ -26,8 +26,9 @@ int main()
 		while (true)
 		{
 			cout << "______________\nTurn #" << turns;
-			cout << "\n______________\nBlue team phase.";
+			cout << "\n______________\n|Blue team phase|";
 			cont = current.TurnBlue();
+			current.AddLog();
 			if (cont == false)
 			{
 				break;
@@ -36,7 +37,7 @@ int main()
 			_getch();
 			system("cls");
 			cout << "______________\nTurn #" << turns;
-			cout << "\n______________\nRed team phase.\n";
+			cout << "\n______________\n|Red team phase|\n";
 			cont = current.TurnRed();
 			current.AddLog();
 			if (cont == false)
@@ -63,8 +64,9 @@ int main()
 		while (true)
 		{
 			cout << "______________\nTurn #" << turns;
-			cout << "\n______________\nBlue team phase.";
+			cout << "\n______________\n|Blue team phase|\n";
 			cont = current.TurnBlue();
+			current.AddLog();
 			if (cont == false)
 			{
 				break;
@@ -73,7 +75,7 @@ int main()
 			_getch();
 			system("cls");
 			cout << "______________\nTurn #" << turns;
-			cout << "\n______________\nRed team phase.\n";
+			cout << "\n______________\n|Red team phase|\n";
 			cont = current.TurnRed();
 			current.AddLog();
 			if (cont == false)
